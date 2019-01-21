@@ -44,7 +44,7 @@ app.post('/api/login', async (req, res) => {
 })
 
 app.get('/api/secret', withAuth, (req, res) => {
-  res.send("It's a secret!")
+  res.send(req.email)
 })
 
 app.listen(port, () => {
