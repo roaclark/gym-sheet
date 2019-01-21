@@ -8,7 +8,11 @@
     "build": "webpack --mode production",
     "postinstall": "webpack --mode production",
     "start": "node app.js",
-    "flow": "flow"
+    "flow": "flow",
+    "db:init": "db-migrate db:create gym --env=dev-init --config db/database.json",
+    "db:drop": "db-migrate db:drop gym --env=dev-init --config db/database.json",
+    "db:up": "db-migrate up --config db/database.json -m db/migrations",
+    "db:reset": "db-migrate reset --config db/database.json -m db/migrations"
   },
   "author": "Rachel Rosalia <rachel@rosalia.me>",
   "license": "MIT",
@@ -23,6 +27,8 @@
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.5",
     "css-loader": "^2.1.0",
+    "db-migrate": "^0.11.5",
+    "db-migrate-pg": "^0.4.0",
     "eslint": "^5.12.1",
     "eslint-config-prettier": "^3.6.0",
     "eslint-plugin-babel": "^5.3.0",

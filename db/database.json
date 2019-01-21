@@ -1,0 +1,17 @@
+{
+  "dev": {
+    "driver": "pg",
+    "user": "postgres",
+    "host": "localhost",
+    "database": "gym",
+    "port": 5432,
+    "ssl": false
+  },
+  "dev-init": {
+    "driver": "pg",
+    "user": "postgres",
+    "host": "localhost",
+    "port": 5432,
+    "ssl": false
+  }
+}
