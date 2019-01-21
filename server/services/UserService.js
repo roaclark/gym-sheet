@@ -1,5 +1,6 @@
 //@flow
 import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 
 type User = {
   email: string,
@@ -7,6 +8,7 @@ type User = {
 }
 
 const SALT_ROUNDS = 10
+const SECRET = 'temporary_secret'
 
 const users: { [string]: User } = {}
 
@@ -25,7 +27,7 @@ export default class UserService {
     return user
   }
 
-  async getUser(email: string, password: string): Promise<?User> {
+  async authenticateUser(email: string, password: string): Promise<?User> {
     const user = users[email]
 
     if (!user) {
@@ -33,6 +35,15 @@ export default class UserService {
     }
 
     const passwordMatch = await bcrypt.compare(password, user.password)
-    return passwordMatch ? user : null
+
+    if (!passwordMatch) {
+      return null
+    }
+
+    const payload = { email }
+    const token = jwt.sign(payload, SECRET, {
+      expiresIn: '1h',
+    })
+    return token
   }
 }
