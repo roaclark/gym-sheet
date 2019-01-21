@@ -1,8 +1,10 @@
 // @flow
 import React, { Component } from 'react'
 import { render } from 'react-dom'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 
-import styles from './styles.css'
+import Home from './pages/home'
+import './styles.css'
 
 export default class App extends Component<*, *> {
   async componentDidMount() {
@@ -15,12 +17,11 @@ export default class App extends Component<*, *> {
 
   render() {
     return (
-      <div>
-        <div className={styles.hello}>Hello world!</div>
-        {this.state && this.state.text && (
-          <div className={styles.helloApi}>{this.state.text}</div>
-        )}
-      </div>
+      <Router>
+        <div>
+          <Route path="/" exact component={Home} />
+        </div>
+      </Router>
     )
   }
 }
