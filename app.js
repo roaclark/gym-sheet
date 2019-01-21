@@ -2,13 +2,16 @@
 import express from 'express'
 import path from 'path'
 import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
 
+import { withAuth } from './server/middleware'
 import UserService from './server/services/UserService'
 
 const app = express()
 const port = process.env.PORT || 3000
 
 app.use(bodyParser.json())
+app.use(cookieParser())
 
 app.use('/', express.static(path.join(__dirname, 'client/dist')))
 
@@ -38,6 +41,10 @@ app.post('/api/login', async (req, res) => {
   } else {
     res.status(401).send('Incorrect username or password')
   }
+})
+
+app.get('/api/secret', withAuth, (req, res) => {
+  res.send("It's a secret!")
 })
 
 app.listen(port, () => {

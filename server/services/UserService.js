@@ -46,4 +46,9 @@ export default class UserService {
     })
     return token
   }
+
+  decodeToken(token: string): ?string {
+    const decoded = jwt.verify(token, SECRET)
+    return decoded && decoded.email
+  }
 }
