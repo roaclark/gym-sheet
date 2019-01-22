@@ -14,7 +14,12 @@ export default class Home extends Component<*, *> {
   }
 
   fetchEmail = async () => {
-    const response = await fetch('api/secret')
+    const token = sessionStorage.getItem('jwtToken') || ''
+    const response = await fetch('api/secret', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
     const message = response.ok
       ? `Hello ${await response.text()}!`
       : 'No user found. :('
@@ -25,7 +30,7 @@ export default class Home extends Component<*, *> {
     this.fetchEmail()
   }
 
-  onSubmit = async (event: *) => {
+  onSubmitLogin = async (event: *) => {
     event.preventDefault()
     const response = await fetch('/api/login', {
       method: 'POST',
@@ -39,13 +44,20 @@ export default class Home extends Component<*, *> {
     })
 
     if (response.ok) {
+      sessionStorage.setItem('jwtToken', await response.text())
       this.fetchEmail()
     } else {
       this.setState({ text: 'Login failed' })
     }
   }
 
+  onLogout = async () => {
+    sessionStorage.removeItem('jwtToken')
+    this.fetchEmail()
+  }
+
   handleInputChange = (event: *) => {
+    event.preventDefault()
     const { value, name } = event.target
     this.setState({
       [name]: value,
@@ -58,7 +70,7 @@ export default class Home extends Component<*, *> {
         <div className={styles.hello}>Hello world!</div>
         <div className={styles.helloApi}>
           {this.state.text}
-          <form onSubmit={this.onSubmit}>
+          <form onSubmit={this.onSubmitLogin}>
             <input
               type="email"
               name="email"
@@ -75,8 +87,9 @@ export default class Home extends Component<*, *> {
               onChange={this.handleInputChange}
               required
             />
-            <input type="submit" value="Submit" />
+            <input type="submit" value="Login" />
           </form>
+          <button onClick={this.onLogout}>Logout</button>
         </div>
       </div>
     )

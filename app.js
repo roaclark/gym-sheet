@@ -37,7 +37,7 @@ app.post('/api/login', async (req, res) => {
   const token = await userService.authenticateUser(email, password)
 
   if (token) {
-    res.cookie('token', token, { httpOnly: true }).sendStatus(200)
+    res.status(200).send(token)
   } else {
     res.status(401).send('Incorrect username or password')
   }
