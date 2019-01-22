@@ -2,6 +2,7 @@
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
+import { JWT_SECRET } from '../config'
 import getDatabase from './getDatabase'
 
 type User = {
@@ -10,7 +11,6 @@ type User = {
 }
 
 const SALT_ROUNDS = 10
-const SECRET = 'temporary_secret'
 
 export default class UserService {
   table: *
@@ -49,14 +49,14 @@ export default class UserService {
     }
 
     const payload = { email }
-    const token = jwt.sign(payload, SECRET, {
+    const token = jwt.sign(payload, JWT_SECRET, {
       expiresIn: '1h',
     })
     return token
   }
 
   decodeToken(token: string): ?string {
-    const decoded = jwt.verify(token, SECRET)
+    const decoded = jwt.verify(token, JWT_SECRET)
     return decoded && decoded.email
   }
 }

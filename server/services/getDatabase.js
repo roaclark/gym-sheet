@@ -1,23 +1,16 @@
 import massive from 'massive'
 
-const GYM_DATABASE = 'gym'
-const GYM_DATABASE_CONFIG = {
-  host: 'localhost',
-  port: 5432,
-  database: 'gym',
-  user: 'postgres',
-  password: 'password',
-}
+import { DATABASE_CONFIG } from '../config'
 
 const connectionCache = {}
 
 export default () => {
-  if (connectionCache[GYM_DATABASE]) {
-    return connectionCache[GYM_DATABASE]
+  if (connectionCache[DATABASE_CONFIG.database]) {
+    return connectionCache[DATABASE_CONFIG.database]
   }
 
-  const connection = massive(GYM_DATABASE_CONFIG)
+  const connection = massive(DATABASE_CONFIG)
 
-  connectionCache[GYM_DATABASE] = connection
-  return connectionCache[GYM_DATABASE]
+  connectionCache[DATABASE_CONFIG.database] = connection
+  return connectionCache[DATABASE_CONFIG.database]
 }

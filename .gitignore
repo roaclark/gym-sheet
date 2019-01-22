@@ -1,4 +1,5 @@
 dist
+.env
 
 .DS__STORE
 *.sublime-workspace
