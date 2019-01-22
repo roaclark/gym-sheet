@@ -4,8 +4,8 @@ import path from 'path'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 
-import { withAuth } from './server/middleware'
-import UserService from './server/services/UserService'
+import { withAuth } from './middleware'
+import UserService from './services/UserService'
 
 const app = express()
 const port = process.env.PORT || 3000
@@ -13,7 +13,7 @@ const port = process.env.PORT || 3000
 app.use(bodyParser.json())
 app.use(cookieParser())
 
-app.use('/', express.static(path.join(__dirname, 'client/dist')))
+app.use('/', express.static(path.join(__dirname, '../../client/dist')))
 
 app.get('/api', (req, res) => {
   res.send('Hello from the server!')
