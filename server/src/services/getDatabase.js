@@ -1,16 +1,16 @@
 import massive from 'massive'
 
-import { DATABASE_CONFIG } from '../config'
+import { DATABASE_NAME, DATABASE_URL } from '../config'
 
 const connectionCache = {}
 
 export default () => {
-  if (connectionCache[DATABASE_CONFIG.database]) {
-    return connectionCache[DATABASE_CONFIG.database]
+  if (connectionCache[DATABASE_NAME]) {
+    return connectionCache[DATABASE_NAME]
   }
 
-  const connection = massive(DATABASE_CONFIG)
+  const connection = massive(DATABASE_URL)
 
-  connectionCache[DATABASE_CONFIG.database] = connection
-  return connectionCache[DATABASE_CONFIG.database]
+  connectionCache[DATABASE_NAME] = connection
+  return connectionCache[DATABASE_NAME]
 }
