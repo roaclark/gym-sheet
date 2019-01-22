@@ -6,7 +6,7 @@
     "start:client": "webpack-dev-server --mode development",
     "start:server": "nodemon --exec babel-node server/src/app.js",
     "build": "webpack --mode production && babel ./server/src --out-dir ./server/dist --delete-dir-on-start",
-    "postinstall": "webpack --mode production",
+    "postinstall": "npm run build",
     "start": "node server/dist/app.js",
     "flow": "flow",
     "db:init": "db-migrate db:create gym --env=dev-init --config db/database.json",
