@@ -2,6 +2,8 @@
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
+import getDatabase from './getDatabase'
+
 type User = {
   email: string,
   password: string,
@@ -10,11 +12,17 @@ type User = {
 const SALT_ROUNDS = 10
 const SECRET = 'temporary_secret'
 
-const users: { [string]: User } = {}
-
 export default class UserService {
+  table: *
+
+  constructor() {
+    this.table = getDatabase().then(db => db.users)
+  }
+
   async registerUser(email: string, password: string): Promise<?User> {
-    if (users[email]) {
+    const usersTable = await this.table
+    const existingUser = await usersTable.findOne({ email })
+    if (existingUser) {
       return null
     }
 
@@ -23,12 +31,12 @@ export default class UserService {
       email,
       password: hashedPassword,
     }
-    users[email] = user
-    return user
+    return await usersTable.insert(user)
   }
 
   async authenticateUser(email: string, password: string): Promise<?User> {
-    const user = users[email]
+    const usersTable = await this.table
+    const user = await usersTable.findOne({ email })
 
     if (!user) {
       return null
