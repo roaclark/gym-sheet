@@ -12,7 +12,8 @@
     "db:init": "db-migrate db:create gym --env=dev-init --config db/database.json",
     "db:drop": "db-migrate db:drop gym --env=dev-init --config db/database.json",
     "db:up": "db-migrate up --config db/database.json -m db/migrations",
-    "db:reset": "db-migrate reset --config db/database.json -m db/migrations"
+    "db:reset": "db-migrate reset --config db/database.json -m db/migrations",
+    "db:up:production": "DATABASE_URL=$(heroku config:get DATABASE_URL -a rosalia-gym-sheet)?ssl=true npm run db:up"
   },
   "author": "Rachel Rosalia <rachel@rosalia.me>",
   "license": "MIT",
