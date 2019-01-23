@@ -43,8 +43,9 @@ app.post('/api/login', async (req, res) => {
   }
 })
 
-app.get('/api/secret', withAuth, (req, res) => {
-  res.send(req.email)
+app.get('/api/identity', withAuth, (req, res) => {
+  const { email, id } = req.user
+  res.send({ email, id })
 })
 
 app.listen(port, () => {

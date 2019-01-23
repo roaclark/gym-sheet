@@ -5,8 +5,12 @@ import jwt from 'jsonwebtoken'
 import { JWT_SECRET } from '../config'
 import getDatabase from './getDatabase'
 
-type User = {
+type Identity = {
+  id: number,
   email: string,
+}
+
+type User = Identity & {
   password: string,
 }
 
@@ -48,15 +52,15 @@ export default class UserService {
       return null
     }
 
-    const payload = { email }
+    const payload = { email, id: user.id }
     const token = jwt.sign(payload, JWT_SECRET, {
       expiresIn: '1h',
     })
     return token
   }
 
-  decodeToken(token: string): ?string {
+  decodeToken(token: string): ?Identity {
     const decoded = jwt.verify(token, JWT_SECRET)
-    return decoded && decoded.email
+    return decoded
   }
 }

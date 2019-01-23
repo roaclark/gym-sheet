@@ -25,7 +25,7 @@ export const withAuth = (req: *, res: *, next: *) => {
 
   const userService = new UserService()
   try {
-    req.email = userService.decodeToken(token)
+    req.user = userService.decodeToken(token)
     next()
   } catch {
     res.status(401).send('Unauthorized: Invalid token')

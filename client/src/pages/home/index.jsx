@@ -15,13 +15,13 @@ export default class Home extends Component<*, *> {
 
   fetchEmail = async () => {
     const token = sessionStorage.getItem('jwtToken') || ''
-    const response = await fetch('api/secret', {
+    const response = await fetch('api/identity', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
     const message = response.ok
-      ? `Hello ${await response.text()}!`
+      ? `Hello ${(await response.json()).email}!`
       : 'No user found. :('
     this.setState({ text: message })
   }
