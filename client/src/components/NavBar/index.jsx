@@ -1,6 +1,6 @@
 // @flow
 import React, { Component, Fragment } from 'react'
-import { Link, Redirect } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
@@ -21,31 +21,13 @@ type PropsType = {
   onLogout: () => {},
 }
 
-type StateType = {
-  loggedOut: boolean,
-  redirectHome: boolean,
-}
-
-export default class NavBar extends Component<PropsType, StateType> {
-  constructor(props: *) {
-    super(props)
-    this.state = {
-      loggedOut: false,
-      redirectHome: false,
-    }
-  }
-
+export default class NavBar extends Component<PropsType> {
   logout = async () => {
     sessionStorage.removeItem('jwtToken')
-    this.setState({ loggedOut: true })
     this.props.onLogout()
   }
 
   IdentityBar() {
-    if (this.state.loggedOut) {
-      return <Redirect to="/" />
-    }
-
     const { user } = this.props
 
     if (user) {
@@ -69,22 +51,16 @@ export default class NavBar extends Component<PropsType, StateType> {
   }
 
   render() {
-    if (this.state.redirectHome) {
-      return <Redirect to="/" />
-    }
-
     const { pageName } = this.props
 
     return (
       <AppBar position="static">
         <Toolbar>
-          <IconButton
-            aria-label="Home"
-            color="inherit"
-            onClick={() => this.setState({ redirectHome: true })}
-          >
-            <HomeIcon />
-          </IconButton>
+          <Link to="/" className={styles.homeLink}>
+            <IconButton aria-label="Home" color="inherit">
+              <HomeIcon />
+            </IconButton>
+          </Link>
           <Typography variant="h6" color="inherit" className={styles.pageTitle}>
             {pageName}
           </Typography>

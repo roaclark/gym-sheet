@@ -6,3 +6,7 @@
 .userEmail {
   padding-right: 10px;
 }
+
+.homeLink {
+  color: inherit;
+}
