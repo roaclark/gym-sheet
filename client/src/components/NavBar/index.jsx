@@ -1,5 +1,6 @@
 // @flow
 import React, { Component, Fragment } from 'react'
+import { Link } from 'react-router-dom'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
@@ -72,7 +73,11 @@ export default class NavBar extends Component<PropsType, StateType> {
       )
     }
 
-    return <Button color="inherit">Login</Button>
+    return (
+      <Button color="inherit" component={Link} to="/login">
+        Login
+      </Button>
+    )
   }
 
   render() {

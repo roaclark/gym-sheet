@@ -8,8 +8,6 @@ export default class Home extends Component<*, *> {
     super(props)
     this.state = {
       text: 'Loading...',
-      email: '',
-      password: '',
     }
   }
 
@@ -30,68 +28,7 @@ export default class Home extends Component<*, *> {
     this.fetchEmail()
   }
 
-  onSubmitLogin = async (event: *) => {
-    event.preventDefault()
-    const response = await fetch('/api/login', {
-      method: 'POST',
-      body: JSON.stringify({
-        email: this.state.email,
-        password: this.state.password,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-
-    if (response.ok) {
-      sessionStorage.setItem('jwtToken', await response.text())
-      this.fetchEmail()
-    } else {
-      this.setState({ text: 'Login failed' })
-    }
-  }
-
-  onLogout = async () => {
-    sessionStorage.removeItem('jwtToken')
-    this.fetchEmail()
-  }
-
-  handleInputChange = (event: *) => {
-    event.preventDefault()
-    const { value, name } = event.target
-    this.setState({
-      [name]: value,
-    })
-  }
-
   render() {
-    return (
-      <div>
-        <div className={styles.hello}>Hello world!</div>
-        <div className={styles.helloApi}>
-          {this.state.text}
-          <form onSubmit={this.onSubmitLogin}>
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter email"
-              value={this.state.email}
-              onChange={this.handleInputChange}
-              required
-            />
-            <input
-              type="password"
-              name="password"
-              placeholder="Enter password"
-              value={this.state.password}
-              onChange={this.handleInputChange}
-              required
-            />
-            <input type="submit" value="Login" />
-          </form>
-          <button onClick={this.onLogout}>Logout</button>
-        </div>
-      </div>
-    )
+    return <div className={styles.hello}>{this.state.text}</div>
   }
 }
