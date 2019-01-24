@@ -1,37 +1,36 @@
 // @flow
 import React, { Component } from 'react'
+import { Redirect } from 'react-router-dom'
 
-// import styles from './styles.css'
+type PropsType = {
+  user: ?{
+    id: number,
+    email: string,
+  },
+}
 
-export default class Home extends Component<*, *> {
+type StateType = {
+  loggedIn: boolean,
+  failedLogin: boolean,
+  email: string,
+  password: string,
+}
+
+export default class Login extends Component<PropsType, StateType> {
   constructor(props: *) {
     super(props)
     this.state = {
-      text: 'Loading...',
+      loggedIn: false,
+      failedLogin: false,
       email: '',
       password: '',
     }
   }
 
-  fetchEmail = async () => {
-    const token = sessionStorage.getItem('jwtToken') || ''
-    const response = await fetch('api/identity', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    const message = response.ok
-      ? `Hello ${(await response.json()).email}!`
-      : 'No user found. :('
-    this.setState({ text: message })
-  }
-
-  async componentDidMount() {
-    this.fetchEmail()
-  }
-
   onSubmitLogin = async (event: *) => {
     event.preventDefault()
+    this.setState({ failedLogin: false })
+
     const response = await fetch('/api/login', {
       method: 'POST',
       body: JSON.stringify({
@@ -45,9 +44,9 @@ export default class Home extends Component<*, *> {
 
     if (response.ok) {
       sessionStorage.setItem('jwtToken', await response.text())
-      this.fetchEmail()
+      this.setState({ loggedIn: true })
     } else {
-      this.setState({ text: 'Login failed' })
+      this.setState({ failedLogin: true })
     }
   }
 
@@ -60,15 +59,21 @@ export default class Home extends Component<*, *> {
   }
 
   render() {
+    const { loggedIn, failedLogin, email, password } = this.state
+
+    if (this.props.user || loggedIn) {
+      return <Redirect to="/" />
+    }
+
     return (
       <div>
-        {this.state.text}
+        {failedLogin && 'Login failed'}
         <form onSubmit={this.onSubmitLogin}>
           <input
             type="email"
             name="email"
             placeholder="Enter email"
-            value={this.state.email}
+            value={email}
             onChange={this.handleInputChange}
             required
           />
@@ -76,7 +81,7 @@ export default class Home extends Component<*, *> {
             type="password"
             name="password"
             placeholder="Enter password"
-            value={this.state.password}
+            value={password}
             onChange={this.handleInputChange}
             required
           />

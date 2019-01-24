@@ -1,6 +1,6 @@
 // @flow
 import React, { Component, Fragment } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
@@ -12,9 +12,6 @@ import styles from './styles.css'
 
 type PropsType = {
   pageName: string,
-}
-
-type StateType = {
   loadingIdentity: boolean,
   user: ?{
     id: number,
@@ -22,45 +19,29 @@ type StateType = {
   },
 }
 
+type StateType = {
+  loggedOut: boolean,
+}
+
 export default class NavBar extends Component<PropsType, StateType> {
   constructor(props: *) {
     super(props)
     this.state = {
-      loadingIdentity: true,
-      user: null,
+      loggedOut: false,
     }
-  }
-
-  async componentDidMount() {
-    this.fetchUser()
-  }
-
-  fetchUser = async () => {
-    const token = sessionStorage.getItem('jwtToken')
-
-    if (!token) {
-      return this.setState({ loadingIdentity: false, user: null })
-    }
-
-    const response = await fetch('api/identity', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-
-    this.setState({
-      loadingIdentity: false,
-      user: response.ok ? await response.json() : null,
-    })
   }
 
   logout = async () => {
     sessionStorage.removeItem('jwtToken')
-    this.fetchUser()
+    this.setState({ loggedOut: true })
   }
 
   IdentityBar() {
-    const { user } = this.state
+    if (this.state.loggedOut) {
+      return <Redirect to="/" />
+    }
+
+    const { user } = this.props
 
     if (user) {
       return (

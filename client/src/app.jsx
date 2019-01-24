@@ -4,7 +4,7 @@ import { render } from 'react-dom'
 import { HashRouter as Router, Route } from 'react-router-dom'
 import CssBaseline from '@material-ui/core/CssBaseline'
 
-import NavBar from './components/NavBar'
+import { withIdentity } from './components/IdentityWrapper'
 import Home from './pages/home'
 import Login from './pages/Login'
 
@@ -14,9 +14,8 @@ export default class App extends Component<{}> {
       <Router>
         <div>
           <CssBaseline />
-          <NavBar pageName="Gym sheet" />
-          <Route path="/" exact component={Home} />
-          <Route path="/login" exact component={Login} />
+          <Route path="/" exact component={withIdentity('Home', Home)} />
+          <Route path="/login" exact component={withIdentity('Login', Login)} />
         </div>
       </Router>
     )
