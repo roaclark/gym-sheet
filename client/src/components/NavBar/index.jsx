@@ -5,6 +5,7 @@ import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
+import HomeIcon from '@material-ui/icons/Home'
 import IconButton from '@material-ui/core/IconButton'
 import LogoutIcon from '@material-ui/icons/ExitToApp'
 
@@ -22,6 +23,7 @@ type PropsType = {
 
 type StateType = {
   loggedOut: boolean,
+  redirectHome: boolean,
 }
 
 export default class NavBar extends Component<PropsType, StateType> {
@@ -29,6 +31,7 @@ export default class NavBar extends Component<PropsType, StateType> {
     super(props)
     this.state = {
       loggedOut: false,
+      redirectHome: false,
     }
   }
 
@@ -48,7 +51,9 @@ export default class NavBar extends Component<PropsType, StateType> {
     if (user) {
       return (
         <Fragment>
-          <Typography color="inherit">{user.email}</Typography>
+          <Typography color="inherit" className={styles.userEmail}>
+            {user.email}
+          </Typography>
           <IconButton aria-label="Logout" color="inherit" onClick={this.logout}>
             <LogoutIcon />
           </IconButton>
@@ -64,10 +69,22 @@ export default class NavBar extends Component<PropsType, StateType> {
   }
 
   render() {
+    if (this.state.redirectHome) {
+      return <Redirect to="/" />
+    }
+
     const { pageName } = this.props
+
     return (
       <AppBar position="static">
         <Toolbar>
+          <IconButton
+            aria-label="Home"
+            color="inherit"
+            onClick={() => this.setState({ redirectHome: true })}
+          >
+            <HomeIcon />
+          </IconButton>
           <Typography variant="h6" color="inherit" className={styles.pageTitle}>
             {pageName}
           </Typography>

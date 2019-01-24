@@ -15,7 +15,11 @@ export default class App extends Component<{}> {
         <div>
           <CssBaseline />
           <Route path="/" exact component={withIdentity('Home', Home, true)} />
-          <Route path="/login" exact component={withIdentity('Login', Login, false)} />
+          <Route
+            path="/login"
+            exact
+            component={withIdentity('Login', Login, false)}
+          />
         </div>
       </Router>
     )
