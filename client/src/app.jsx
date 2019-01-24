@@ -14,8 +14,8 @@ export default class App extends Component<{}> {
       <Router>
         <div>
           <CssBaseline />
-          <Route path="/" exact component={withIdentity('Home', Home)} />
-          <Route path="/login" exact component={withIdentity('Login', Login)} />
+          <Route path="/" exact component={withIdentity('Home', Home, true)} />
+          <Route path="/login" exact component={withIdentity('Login', Login, false)} />
         </div>
       </Router>
     )

@@ -17,6 +17,7 @@ type PropsType = {
     id: number,
     email: string,
   },
+  onLogout: () => {},
 }
 
 type StateType = {
@@ -34,6 +35,7 @@ export default class NavBar extends Component<PropsType, StateType> {
   logout = async () => {
     sessionStorage.removeItem('jwtToken')
     this.setState({ loggedOut: true })
+    this.props.onLogout()
   }
 
   IdentityBar() {

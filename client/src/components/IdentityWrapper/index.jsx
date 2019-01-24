@@ -1,5 +1,6 @@
 // @flow
 import React, { Component, Fragment } from 'react'
+import { Redirect } from 'react-router-dom'
 
 import NavBar from '../NavBar'
 
@@ -11,7 +12,11 @@ type StateType = {
   },
 }
 
-export const withIdentity = (pageName: string, PageComponent: *) =>
+export const withIdentity = (
+  pageName: string,
+  PageComponent: *,
+  authRequired: boolean,
+) =>
   class IdentityWrapper extends Component<*, StateType> {
     constructor(props: *) {
       super(props)
@@ -26,6 +31,8 @@ export const withIdentity = (pageName: string, PageComponent: *) =>
     }
 
     fetchUser = async () => {
+      this.setState({ loadingIdentity: true })
+
       const token = sessionStorage.getItem('jwtToken')
 
       if (!token) {
@@ -44,6 +51,20 @@ export const withIdentity = (pageName: string, PageComponent: *) =>
       })
     }
 
+    PageContent() {
+      const { loadingIdentity, user } = this.state
+
+      if (loadingIdentity) {
+        return <div>Loading...</div>
+      }
+
+      if (authRequired && !user) {
+        return <Redirect to="/login" />
+      }
+
+      return <PageComponent user={user} {...this.props} />
+    }
+
     render() {
       const { loadingIdentity, user } = this.state
 
@@ -53,12 +74,9 @@ export const withIdentity = (pageName: string, PageComponent: *) =>
             pageName={pageName}
             user={user}
             loadingIdentity={loadingIdentity}
+            onLogout={this.fetchUser}
           />
-          {loadingIdentity ? (
-            <div>Loading...</div>
-          ) : (
-            <PageComponent user={user} {...this.props} />
-          )}
+          {this.PageContent()}
         </Fragment>
       )
     }
